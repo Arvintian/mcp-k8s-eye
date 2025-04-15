@@ -13,7 +13,7 @@ const (
 	LastApplyAnnotation = "kubectl.kubernetes.io/last-applied-configuration"
 )
 
-func (k *Kubernetes) ResourceList(ctx context.Context, kind, namespace string) (string, error) {
+func (k *Kubernetes) ResourceList(ctx context.Context, kind, namespace, labelSelector string) (string, error) {
 	gv := utils.GetGroupVersionForKind(kind)
 	gvk := gv.WithKind(kind)
 	gvr, err := k.gvrFor(gvk)
@@ -29,7 +29,9 @@ func (k *Kubernetes) ResourceList(ctx context.Context, kind, namespace string) (
 		namespace = utils.NamespaceOrDefault(namespace)
 	}
 
-	resources, err := k.dynamicClient.Resource(gvr).Namespace(namespace).List(ctx, metav1.ListOptions{})
+	resources, err := k.dynamicClient.Resource(gvr).Namespace(namespace).List(ctx, metav1.ListOptions{
+		LabelSelector: labelSelector,
+	})
 	if err != nil {
 		return "", err
 	}

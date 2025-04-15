@@ -19,6 +19,9 @@ func (s *Server) initResources() []server.ServerTool {
 				mcp.WithString("namespace",
 					mcp.Description("the namespace to list resources in"),
 				),
+				mcp.WithString("labelSelector",
+					mcp.Description("the label selector to filter list resource"),
+				),
 			),
 			Handler: s.resourceList,
 		},
@@ -58,7 +61,8 @@ func (s *Server) initResources() []server.ServerTool {
 func (s *Server) resourceList(ctx context.Context, ctr mcp.CallToolRequest) (*mcp.CallToolResult, error) {
 	ns := ctr.Params.Arguments["namespace"].(string)
 	kind := ctr.Params.Arguments["kind"].(string)
-	res, err := s.k8s.ResourceList(ctx, kind, ns)
+	labelSelector := ctr.Params.Arguments["labelSelector"].(string)
+	res, err := s.k8s.ResourceList(ctx, kind, ns, labelSelector)
 	if err != nil {
 		return mcp.NewToolResultError(fmt.Sprintf("failed to list resources in namespace %s: %v", ns, err)), nil
 	}

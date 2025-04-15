@@ -103,7 +103,7 @@ func TestResourceList(t *testing.T) {
 		k := newTestKubernetes(clientset, newDynamicClient())
 
 		// Execute
-		result, err := k.ResourceList(context.Background(), "Deployment", "test-namespace")
+		result, err := k.ResourceList(context.Background(), "Deployment", "test-namespace", "")
 
 		// Verify
 		assert.NoError(t, err, "Should not return an error")
