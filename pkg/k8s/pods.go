@@ -15,10 +15,11 @@ import (
 )
 
 // PodLogs returns the logs of a pod.
-func (k *Kubernetes) PodLogs(ctx context.Context, namespace, name string) (string, error) {
+func (k *Kubernetes) PodLogs(ctx context.Context, namespace, name, container string) (string, error) {
 	tailLines := int64(200)
 	req := k.clientset.CoreV1().Pods(namespace).GetLogs(name, &v1.PodLogOptions{
 		TailLines: &tailLines,
+		Container: container,
 	})
 	res := req.Do(ctx)
 	if res.Error() != nil {

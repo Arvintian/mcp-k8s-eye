@@ -19,6 +19,9 @@ func (s *Server) initPods() []server.ServerTool {
 				mcp.WithString("pod",
 					mcp.Description("the pod to get"),
 				),
+				mcp.WithString("container",
+					mcp.Description("the container to get"),
+				),
 			),
 			Handler: s.podLogs,
 		},
@@ -52,7 +55,8 @@ func (s *Server) initPods() []server.ServerTool {
 func (s *Server) podLogs(ctx context.Context, ctr mcp.CallToolRequest) (*mcp.CallToolResult, error) {
 	ns := ctr.Params.Arguments["namespace"].(string)
 	pod := ctr.Params.Arguments["pod"].(string)
-	res, err := s.k8s.PodLogs(ctx, ns, pod)
+	container := ctr.Params.Arguments["container"].(string)
+	res, err := s.k8s.PodLogs(ctx, ns, pod, container)
 	if err != nil {
 		return mcp.NewToolResultError(fmt.Sprintf("failed to get logs for pod %s/%s: %v", ns, pod, err)), nil
 	}
