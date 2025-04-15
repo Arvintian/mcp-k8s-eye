@@ -9,6 +9,10 @@ import (
 	"k8s.io/apimachinery/pkg/runtime/schema"
 )
 
+const (
+	LastApplyAnnotation = "kubectl.kubernetes.io/last-applied-configuration"
+)
+
 func (k *Kubernetes) ResourceList(ctx context.Context, kind, namespace string) (string, error) {
 	gv := utils.GetGroupVersionForKind(kind)
 	gvk := gv.WithKind(kind)
@@ -28,6 +32,13 @@ func (k *Kubernetes) ResourceList(ctx context.Context, kind, namespace string) (
 	resources, err := k.dynamicClient.Resource(gvr).Namespace(namespace).List(ctx, metav1.ListOptions{})
 	if err != nil {
 		return "", err
+	}
+	for _, item := range resources.Items {
+		annotations := item.GetAnnotations()
+		if _, ok := annotations[LastApplyAnnotation]; ok {
+			delete(annotations, LastApplyAnnotation)
+		}
+		item.SetAnnotations(annotations)
 	}
 
 	return utils.Marshal(resources.Items)
@@ -54,6 +65,11 @@ func (k *Kubernetes) ResourceGet(ctx context.Context, kind, namespace, name stri
 	if err != nil {
 		return "", err
 	}
+	annotations := resource.GetAnnotations()
+	if _, ok := annotations[LastApplyAnnotation]; ok {
+		delete(annotations, LastApplyAnnotation)
+	}
+	resource.SetAnnotations(annotations)
 
 	return utils.Marshal(resource)
 }
