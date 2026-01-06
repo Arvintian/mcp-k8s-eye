@@ -9,7 +9,7 @@ import (
 )
 
 func (s *Server) initPod() []server.ServerTool {
-	return []server.ServerTool{
+	tools := []server.ServerTool{
 		{
 			Tool: mcp.NewTool("pod logs",
 				mcp.WithDescription("get pod logs"),
@@ -26,6 +26,17 @@ func (s *Server) initPod() []server.ServerTool {
 			Handler: s.podLogs,
 		},
 		{
+			Tool: mcp.NewTool("pod analyze",
+				mcp.WithDescription("analyze pod"),
+				mcp.WithString("namespace",
+					mcp.Description("the namespace to get pods in"),
+				),
+			),
+			Handler: s.podAnalyze,
+		},
+	}
+	if s.write {
+		tools = append(tools, server.ServerTool{
 			Tool: mcp.NewTool("pod exec",
 				mcp.WithDescription("execute a command in a pod"),
 				mcp.WithString("namespace",
@@ -39,17 +50,9 @@ func (s *Server) initPod() []server.ServerTool {
 				),
 			),
 			Handler: s.podExec,
-		},
-		{
-			Tool: mcp.NewTool("pod analyze",
-				mcp.WithDescription("analyze pod"),
-				mcp.WithString("namespace",
-					mcp.Description("the namespace to get pods in"),
-				),
-			),
-			Handler: s.podAnalyze,
-		},
+		})
 	}
+	return tools
 }
 
 func (s *Server) podLogs(ctx context.Context, ctr mcp.CallToolRequest) (*mcp.CallToolResult, error) {

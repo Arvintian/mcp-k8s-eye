@@ -1,9 +1,9 @@
 package mcp
 
 import (
+	"log"
 	"slices"
 
-	"github.com/mark3labs/mcp-go/mcp"
 	"github.com/mark3labs/mcp-go/server"
 	"github.com/wenhuwang/mcp-k8s-eye/pkg/k8s"
 )
@@ -11,9 +11,10 @@ import (
 type Server struct {
 	server *server.MCPServer
 	k8s    *k8s.Kubernetes
+	write  bool
 }
 
-func NewServer(name, version string) (*Server, error) {
+func NewServer(name, version string, write bool) (*Server, error) {
 	s := &Server{
 		server: server.NewMCPServer(
 			name,
@@ -22,6 +23,7 @@ func NewServer(name, version string) (*Server, error) {
 			server.WithPromptCapabilities(true),
 			server.WithLogging(),
 		),
+		write: write,
 	}
 	k8s, err := k8s.NewKubernetes()
 	if err != nil {
@@ -29,7 +31,7 @@ func NewServer(name, version string) (*Server, error) {
 	}
 	s.k8s = k8s
 
-	s.server.AddTools(slices.Concat(
+	tools := slices.Concat(
 		s.initResource(),
 		s.initPod(),
 		s.initDeployment(),
@@ -40,16 +42,11 @@ func NewServer(name, version string) (*Server, error) {
 		s.initCronJob(),
 		s.initNetworkPolicy(),
 		s.initWebhook(),
-	)...)
-
-	// test prompt
-	s.server.AddPrompt(mcp.NewPrompt("get namespace",
-		mcp.WithPromptDescription("get namespaces"),
-		mcp.WithArgument("name",
-			mcp.ArgumentDescription("the namespace to get"),
-		),
-	), s.getNamespacePrompt)
-
+	)
+	s.server.AddTools(tools...)
+	for _, item := range tools {
+		log.Printf("add tool %s\n", item.Tool.Name)
+	}
 	return s, nil
 }
 

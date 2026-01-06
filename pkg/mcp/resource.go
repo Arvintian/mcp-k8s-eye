@@ -10,7 +10,7 @@ import (
 )
 
 func (s *Server) initResource() []server.ServerTool {
-	return []server.ServerTool{
+	tools := []server.ServerTool{
 		{
 			Tool: mcp.NewTool("resource list",
 				mcp.WithDescription("list resources in a namespace or all namespaces"),
@@ -45,34 +45,6 @@ func (s *Server) initResource() []server.ServerTool {
 				),
 			),
 			Handler: s.resourceGet,
-		},
-		{
-			Tool: mcp.NewTool("resource delete",
-				mcp.WithDescription("delete resource"),
-				mcp.WithString("kind",
-					mcp.Description("the kind of resource to delete"),
-					mcp.Required(),
-				),
-				mcp.WithString("namespace",
-					mcp.Description("the namespace to get resources in"),
-					mcp.Required(),
-				),
-				mcp.WithString("name",
-					mcp.Description("the resource name to delete"),
-					mcp.Required(),
-				),
-			),
-			Handler: s.resourceDelete,
-		},
-		{
-			Tool: mcp.NewTool("resource create or update",
-				mcp.WithDescription("create or update resource"),
-				mcp.WithString("resource",
-					mcp.Description("the resource to create or update"),
-					mcp.Required(),
-				),
-			),
-			Handler: s.resourceCreateOrUpdate,
 		},
 		{
 			Tool: mcp.NewTool("resource describe",
@@ -111,6 +83,38 @@ func (s *Server) initResource() []server.ServerTool {
 			Handler: s.workloadResourceUsage,
 		},
 	}
+	if s.write {
+		tools = append(tools,
+			server.ServerTool{
+				Tool: mcp.NewTool("resource delete",
+					mcp.WithDescription("delete resource"),
+					mcp.WithString("kind",
+						mcp.Description("the kind of resource to delete"),
+						mcp.Required(),
+					),
+					mcp.WithString("namespace",
+						mcp.Description("the namespace to get resources in"),
+						mcp.Required(),
+					),
+					mcp.WithString("name",
+						mcp.Description("the resource name to delete"),
+						mcp.Required(),
+					),
+				),
+				Handler: s.resourceDelete,
+			},
+			server.ServerTool{
+				Tool: mcp.NewTool("resource create or update",
+					mcp.WithDescription("create or update resource"),
+					mcp.WithString("resource",
+						mcp.Description("the resource to create or update"),
+						mcp.Required(),
+					),
+				),
+				Handler: s.resourceCreateOrUpdate,
+			})
+	}
+	return tools
 }
 
 func (s *Server) resourceList(ctx context.Context, ctr mcp.CallToolRequest) (*mcp.CallToolResult, error) {
@@ -186,32 +190,4 @@ func (s *Server) workloadResourceUsage(ctx context.Context, ctr mcp.CallToolRequ
 		return mcp.NewToolResultError(fmt.Sprintf("failed to get resource usage in namesoace %s: %v", namespace, err)), nil
 	}
 	return mcp.NewToolResultText(res), nil
-}
-
-// test prompt
-func (s *Server) getNamespacePrompt(ctx context.Context, request mcp.GetPromptRequest) (*mcp.GetPromptResult, error) {
-	var name string
-	if v, ok := request.Params.Arguments["name"]; ok {
-		name = v
-	} else {
-		name = "all namespaces"
-	}
-
-	return &mcp.GetPromptResult{
-		Description: fmt.Sprintf("Get namespace %s", name),
-		Messages: []mcp.PromptMessage{
-			{
-				Role: mcp.RoleUser,
-				Content: mcp.TextContent{
-					Text: fmt.Sprintf("Get namespace %s", name),
-				},
-			},
-			{
-				Role: mcp.RoleAssistant,
-				Content: mcp.TextContent{
-					Text: fmt.Sprintf("Namespace %s:", name),
-				},
-			},
-		},
-	}, nil
 }

@@ -9,8 +9,19 @@ import (
 )
 
 func (s *Server) initDeployment() []server.ServerTool {
-	return []server.ServerTool{
+	tools := []server.ServerTool{
 		{
+			Tool: mcp.NewTool("deployment analyze",
+				mcp.WithDescription("analyze deployment status"),
+				mcp.WithString("namespace",
+					mcp.Description("the namespace to analyze deployments in"),
+				),
+			),
+			Handler: s.deploymentAnalyze,
+		},
+	}
+	if s.write {
+		tools = append(tools, server.ServerTool{
 			Tool: mcp.NewTool("deployment scale",
 				mcp.WithDescription("scale deployment replicas"),
 				mcp.WithString("namespace",
@@ -24,17 +35,9 @@ func (s *Server) initDeployment() []server.ServerTool {
 				),
 			),
 			Handler: s.deploymentScale,
-		},
-		{
-			Tool: mcp.NewTool("deployment analyze",
-				mcp.WithDescription("analyze deployment status"),
-				mcp.WithString("namespace",
-					mcp.Description("the namespace to analyze deployments in"),
-				),
-			),
-			Handler: s.deploymentAnalyze,
-		},
+		})
 	}
+	return tools
 }
 
 func (s *Server) deploymentScale(ctx context.Context, ctr mcp.CallToolRequest) (*mcp.CallToolResult, error) {
