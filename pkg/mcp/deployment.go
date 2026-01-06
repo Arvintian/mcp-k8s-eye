@@ -49,11 +49,11 @@ func (s *Server) deploymentScale(ctx context.Context, ctr mcp.CallToolRequest) (
 	deploy := ctr.GetString("deployment", "")
 	replicas := int32(ctr.GetInt("replicas", -1))
 	if replicas < 0 {
-		return mcp.NewToolResultError("scale deployment replicas error"), nil
+		return mcp.NewToolResultText("scale deployment replicas error"), nil
 	}
 	res, err := s.k8s.DeploymentScale(ctx, ns, deploy, replicas)
 	if err != nil {
-		return mcp.NewToolResultError(fmt.Sprintf("failed to scale deployment %s/%s: %v", ns, deploy, err)), nil
+		return mcp.NewToolResultText(fmt.Sprintf("failed to scale deployment %s/%s: %v", ns, deploy, err)), nil
 	}
 	return mcp.NewToolResultText(res), nil
 }
@@ -62,7 +62,7 @@ func (s *Server) deploymentAnalyze(ctx context.Context, ctr mcp.CallToolRequest)
 	ns := ctr.GetString("namespace", "")
 	res, err := s.k8s.AnalyzeDeployment(ctx, ns)
 	if err != nil {
-		return mcp.NewToolResultError(fmt.Sprintf("failed to analyze deployments in namespace %s: %v", ns, err)), nil
+		return mcp.NewToolResultText(fmt.Sprintf("failed to analyze deployments in namespace %s: %v", ns, err)), nil
 	}
 	return mcp.NewToolResultText(res), nil
 }

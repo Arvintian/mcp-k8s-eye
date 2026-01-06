@@ -35,7 +35,7 @@ func (s *Server) initResource() []server.ServerTool {
 					mcp.Required(),
 				),
 				mcp.WithString("namespace",
-					mcp.Description("the namespace to get resources in"),
+					mcp.Description("the namespace to get resources in, if kind is namespaced resource this field is required"),
 				),
 				mcp.WithString("name",
 					mcp.Description("the resource name to get"),
@@ -123,7 +123,7 @@ func (s *Server) resourceList(ctx context.Context, ctr mcp.CallToolRequest) (*mc
 	labelSelector := ctr.GetString("labelSelector", "")
 	res, err := s.k8s.ResourceList(ctx, kind, ns, labelSelector)
 	if err != nil {
-		return mcp.NewToolResultError(fmt.Sprintf("failed to list resources in namespace %s: %v", ns, err)), nil
+		return mcp.NewToolResultText(fmt.Sprintf("failed to list resources in namespace %s: %v", ns, err)), nil
 	}
 	return mcp.NewToolResultText(res), nil
 }
@@ -134,7 +134,7 @@ func (s *Server) resourceGet(ctx context.Context, ctr mcp.CallToolRequest) (*mcp
 	name := ctr.GetString("name", "")
 	res, err := s.k8s.ResourceGet(ctx, kind, ns, name)
 	if err != nil {
-		return mcp.NewToolResultError(fmt.Sprintf("failed to get resource %s/%s: %v", ns, name, err)), nil
+		return mcp.NewToolResultText(fmt.Sprintf("failed to get resource %s/%s: %v", ns, name, err)), nil
 	}
 	return mcp.NewToolResultText(res), nil
 }
@@ -145,7 +145,7 @@ func (s *Server) resourceDelete(ctx context.Context, ctr mcp.CallToolRequest) (*
 	name := ctr.GetString("name", "")
 	res, err := s.k8s.ResourceDelete(ctx, kind, ns, name)
 	if err != nil {
-		return mcp.NewToolResultError(fmt.Sprintf("failed to delete resource %s/%s: %v", ns, name, err)), nil
+		return mcp.NewToolResultText(fmt.Sprintf("failed to delete resource %s/%s: %v", ns, name, err)), nil
 	}
 	return mcp.NewToolResultText(res), nil
 }
@@ -154,7 +154,7 @@ func (s *Server) resourceCreateOrUpdate(ctx context.Context, ctr mcp.CallToolReq
 	resource := ctr.GetString("resource", "")
 	res, err := s.k8s.ResourceCreateOrUpdate(ctx, resource)
 	if err != nil {
-		return mcp.NewToolResultError(fmt.Sprintf("failed to create/update resource: %v", err)), nil
+		return mcp.NewToolResultText(fmt.Sprintf("failed to create/update resource: %v", err)), nil
 	}
 	return mcp.NewToolResultText(res), nil
 }
@@ -168,7 +168,7 @@ func (s *Server) ResourceDescribe(ctx context.Context, ctr mcp.CallToolRequest) 
 	}
 	res, err := s.k8s.ResourceDescribe(r)
 	if err != nil {
-		return mcp.NewToolResultError(fmt.Sprintf("failed to describe resource: %v", err)), nil
+		return mcp.NewToolResultText(fmt.Sprintf("failed to describe resource: %v", err)), nil
 	}
 	return mcp.NewToolResultText(res), nil
 }
@@ -184,7 +184,7 @@ func (s *Server) workloadResourceUsage(ctx context.Context, ctr mcp.CallToolRequ
 		Kind:      kind,
 	})
 	if err != nil {
-		return mcp.NewToolResultError(fmt.Sprintf("failed to get resource usage in namesoace %s: %v", namespace, err)), nil
+		return mcp.NewToolResultText(fmt.Sprintf("failed to get resource usage in namesoace %s: %v", namespace, err)), nil
 	}
 	return mcp.NewToolResultText(res), nil
 }

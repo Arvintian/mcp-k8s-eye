@@ -65,7 +65,7 @@ func (s *Server) podLogs(ctx context.Context, ctr mcp.CallToolRequest) (*mcp.Cal
 	container := ctr.GetString("container", "")
 	res, err := s.k8s.PodLogs(ctx, ns, pod, container)
 	if err != nil {
-		return mcp.NewToolResultError(fmt.Sprintf("failed to get logs for pod %s/%s: %v", ns, pod, err)), nil
+		return mcp.NewToolResultText(fmt.Sprintf("failed to get logs for pod %s/%s: %v", ns, pod, err)), nil
 	}
 	return mcp.NewToolResultText(res), nil
 }
@@ -76,7 +76,7 @@ func (s *Server) podExec(ctx context.Context, ctr mcp.CallToolRequest) (*mcp.Cal
 	cmd := ctr.GetString("command", "")
 	res, err := s.k8s.PodExec(ctx, ns, pod, cmd)
 	if err != nil {
-		return mcp.NewToolResultError(fmt.Sprintf("failed to execute command %s on pod %s/%s: %v", cmd, ns, pod, err)), nil
+		return mcp.NewToolResultText(fmt.Sprintf("failed to execute command %s on pod %s/%s: %v", cmd, ns, pod, err)), nil
 	}
 	return mcp.NewToolResultText(res), nil
 }
@@ -85,7 +85,7 @@ func (s *Server) podAnalyze(ctx context.Context, ctr mcp.CallToolRequest) (*mcp.
 	ns := ctr.GetString("namespace", "")
 	res, err := s.k8s.AnalyzePod(ctx, ns)
 	if err != nil {
-		return mcp.NewToolResultError(fmt.Sprintf("failed to analyze pods in namespace %s: %v", ns, err)), nil
+		return mcp.NewToolResultText(fmt.Sprintf("failed to analyze pods in namespace %s: %v", ns, err)), nil
 	}
 	return mcp.NewToolResultText(res), nil
 }

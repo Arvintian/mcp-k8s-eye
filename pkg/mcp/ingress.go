@@ -31,7 +31,7 @@ func (s *Server) ingressAnalyze(ctx context.Context, ctr mcp.CallToolRequest) (*
 	}
 	res, err := s.k8s.AnalyzeIngress(r)
 	if err != nil {
-		return mcp.NewToolResultError(fmt.Sprintf("failed to analyze ingress in namespace %s: %v", ns, err)), nil
+		return mcp.NewToolResultText(fmt.Sprintf("failed to analyze ingress in namespace %s: %v", ns, err)), nil
 	}
 	return mcp.NewToolResultText(res), nil
 }

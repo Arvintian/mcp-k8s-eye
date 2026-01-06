@@ -25,7 +25,7 @@ func (s *Server) nodeAnalyze(ctx context.Context, ctr mcp.CallToolRequest) (*mcp
 	name := ctr.GetString("name", "")
 	res, err := s.k8s.AnalyzeNode(ctx, name)
 	if err != nil {
-		return mcp.NewToolResultError(fmt.Sprintf("failed to analyze node %s: %v", name, err)), nil
+		return mcp.NewToolResultText(fmt.Sprintf("failed to analyze node %s: %v", name, err)), nil
 	}
 	return mcp.NewToolResultText(res), nil
 }

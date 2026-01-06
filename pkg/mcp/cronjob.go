@@ -32,7 +32,7 @@ func (s *Server) cronjobAnalyze(ctx context.Context, ctr mcp.CallToolRequest) (*
 		Namespace: ns,
 	})
 	if err != nil {
-		return mcp.NewToolResultError(fmt.Sprintf("failed to analyze cronjob in namespace %s: %v", ns, err)), nil
+		return mcp.NewToolResultText(fmt.Sprintf("failed to analyze cronjob in namespace %s: %v", ns, err)), nil
 	}
 	return mcp.NewToolResultText(res), nil
 }

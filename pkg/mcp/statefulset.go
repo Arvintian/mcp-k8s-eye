@@ -31,7 +31,7 @@ func (s *Server) statefulSetAnalyze(ctx context.Context, ctr mcp.CallToolRequest
 	}
 	res, err := s.k8s.AnalyzeStatefulSet(r)
 	if err != nil {
-		return mcp.NewToolResultError(fmt.Sprintf("failed to analyze statefulsets in namespace %s: %v", ns, err)), nil
+		return mcp.NewToolResultText(fmt.Sprintf("failed to analyze statefulsets in namespace %s: %v", ns, err)), nil
 	}
 	return mcp.NewToolResultText(res), nil
 }

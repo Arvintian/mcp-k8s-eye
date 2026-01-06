@@ -49,7 +49,7 @@ func (s *Server) validatingWebhookAnalyze(ctx context.Context, ctr mcp.CallToolR
 		LabelSelector: labelSelector,
 	})
 	if err != nil {
-		return mcp.NewToolResultError(fmt.Sprintf("failed to analyze validating webhooks: %v", err)), nil
+		return mcp.NewToolResultText(fmt.Sprintf("failed to analyze validating webhooks: %v", err)), nil
 	}
 	return mcp.NewToolResultText(res), nil
 }
@@ -65,7 +65,7 @@ func (s *Server) mutatingWebhookAnalyze(ctx context.Context, ctr mcp.CallToolReq
 		LabelSelector: labelSelector,
 	})
 	if err != nil {
-		return mcp.NewToolResultError(fmt.Sprintf("failed to analyze mutating webhooks: %v", err)), nil
+		return mcp.NewToolResultText(fmt.Sprintf("failed to analyze mutating webhooks: %v", err)), nil
 	}
 	return mcp.NewToolResultText(res), nil
 }

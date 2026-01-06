@@ -32,7 +32,7 @@ func (s *Server) networkPolicyAnalyze(ctx context.Context, ctr mcp.CallToolReque
 		Namespace: ns,
 	})
 	if err != nil {
-		return mcp.NewToolResultError(fmt.Sprintf("failed to analyze network policies in namespace %s: %v", ns, err)), nil
+		return mcp.NewToolResultText(fmt.Sprintf("failed to analyze network policies in namespace %s: %v", ns, err)), nil
 	}
 	return mcp.NewToolResultText(res), nil
 }
