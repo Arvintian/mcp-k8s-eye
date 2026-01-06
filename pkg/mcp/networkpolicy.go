@@ -26,10 +26,7 @@ func (s *Server) initNetworkPolicy() []server.ServerTool {
 }
 
 func (s *Server) networkPolicyAnalyze(ctx context.Context, ctr mcp.CallToolRequest) (*mcp.CallToolResult, error) {
-	var ns string
-	if v, ok := ctr.Params.Arguments["namespace"].(string); ok {
-		ns = v
-	}
+	ns := ctr.GetString("namespace", "")
 	res, err := s.k8s.AnalyzeNetworkPolicy(common.Request{
 		Context:   ctx,
 		Namespace: ns,

@@ -41,15 +41,8 @@ func (s *Server) initWebhook() []server.ServerTool {
 
 // Handler for validating webhook analysis
 func (s *Server) validatingWebhookAnalyze(ctx context.Context, ctr mcp.CallToolRequest) (*mcp.CallToolResult, error) {
-	var name string
-	if v, ok := ctr.Params.Arguments["name"].(string); ok {
-		name = v
-	}
-	var labelSelector string
-	if v, ok := ctr.Params.Arguments["label-selector"].(string); ok {
-		labelSelector = v
-	}
-
+	name := ctr.GetString("name", "")
+	labelSelector := ctr.GetString("label-selector", "")
 	res, err := s.k8s.AnalyzeValidatingWebhook(common.Request{
 		Context:       ctx,
 		Name:          name,
@@ -63,14 +56,8 @@ func (s *Server) validatingWebhookAnalyze(ctx context.Context, ctr mcp.CallToolR
 
 // Handler for mutating webhook analysis
 func (s *Server) mutatingWebhookAnalyze(ctx context.Context, ctr mcp.CallToolRequest) (*mcp.CallToolResult, error) {
-	var name string
-	if v, ok := ctr.Params.Arguments["name"].(string); ok {
-		name = v
-	}
-	var labelSelector string
-	if v, ok := ctr.Params.Arguments["label-selector"].(string); ok {
-		labelSelector = v
-	}
+	name := ctr.GetString("name", "")
+	labelSelector := ctr.GetString("label-selector", "")
 
 	res, err := s.k8s.AnalyzeMutatingWebhook(common.Request{
 		Context:       ctx,

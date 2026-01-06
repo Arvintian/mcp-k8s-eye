@@ -19,11 +19,10 @@ func (s *Server) initResource() []server.ServerTool {
 					mcp.Required(),
 				),
 				mcp.WithString("namespace",
-					mcp.Description("the namespace to list resources in"),
-					mcp.Required(),
+					mcp.Description("the namespace to list resources in, can be a \"\" string to list resources in all namespace"),
 				),
 				mcp.WithString("labelSelector",
-					mcp.Description("the label selector to filter list resource"),
+					mcp.Description("the label selector to filter list resource, , can be a \"\" string if no selector"),
 				),
 			),
 			Handler: s.resourceList,
@@ -37,7 +36,6 @@ func (s *Server) initResource() []server.ServerTool {
 				),
 				mcp.WithString("namespace",
 					mcp.Description("the namespace to get resources in"),
-					mcp.Required(),
 				),
 				mcp.WithString("name",
 					mcp.Description("the resource name to get"),
@@ -55,7 +53,6 @@ func (s *Server) initResource() []server.ServerTool {
 				),
 				mcp.WithString("namespace",
 					mcp.Description("the resource namespace to describe"),
-					mcp.Required(),
 				),
 				mcp.WithString("name",
 					mcp.Description("the resource name to describe"),
@@ -118,9 +115,9 @@ func (s *Server) initResource() []server.ServerTool {
 }
 
 func (s *Server) resourceList(ctx context.Context, ctr mcp.CallToolRequest) (*mcp.CallToolResult, error) {
-	ns := ctr.Params.Arguments["namespace"].(string)
-	kind := ctr.Params.Arguments["kind"].(string)
-	labelSelector := ctr.Params.Arguments["labelSelector"].(string)
+	ns := ctr.GetString("namespace", "")
+	kind := ctr.GetString("kind", "")
+	labelSelector := ctr.GetString("labelSelector", "")
 	res, err := s.k8s.ResourceList(ctx, kind, ns, labelSelector)
 	if err != nil {
 		return mcp.NewToolResultError(fmt.Sprintf("failed to list resources in namespace %s: %v", ns, err)), nil
@@ -129,9 +126,9 @@ func (s *Server) resourceList(ctx context.Context, ctr mcp.CallToolRequest) (*mc
 }
 
 func (s *Server) resourceGet(ctx context.Context, ctr mcp.CallToolRequest) (*mcp.CallToolResult, error) {
-	ns := ctr.Params.Arguments["namespace"].(string)
-	kind := ctr.Params.Arguments["kind"].(string)
-	name := ctr.Params.Arguments["name"].(string)
+	ns := ctr.GetString("namespace", "")
+	kind := ctr.GetString("kind", "")
+	name := ctr.GetString("name", "")
 	res, err := s.k8s.ResourceGet(ctx, kind, ns, name)
 	if err != nil {
 		return mcp.NewToolResultError(fmt.Sprintf("failed to get resource %s/%s: %v", ns, name, err)), nil
@@ -140,9 +137,9 @@ func (s *Server) resourceGet(ctx context.Context, ctr mcp.CallToolRequest) (*mcp
 }
 
 func (s *Server) resourceDelete(ctx context.Context, ctr mcp.CallToolRequest) (*mcp.CallToolResult, error) {
-	ns := ctr.Params.Arguments["namespace"].(string)
-	kind := ctr.Params.Arguments["kind"].(string)
-	name := ctr.Params.Arguments["name"].(string)
+	ns := ctr.GetString("namespace", "")
+	kind := ctr.GetString("kind", "")
+	name := ctr.GetString("name", "")
 	res, err := s.k8s.ResourceDelete(ctx, kind, ns, name)
 	if err != nil {
 		return mcp.NewToolResultError(fmt.Sprintf("failed to delete resource %s/%s: %v", ns, name, err)), nil
@@ -151,7 +148,7 @@ func (s *Server) resourceDelete(ctx context.Context, ctr mcp.CallToolRequest) (*
 }
 
 func (s *Server) resourceCreateOrUpdate(ctx context.Context, ctr mcp.CallToolRequest) (*mcp.CallToolResult, error) {
-	resource := ctr.Params.Arguments["resource"].(string)
+	resource := ctr.GetString("resource", "")
 	res, err := s.k8s.ResourceCreateOrUpdate(ctx, resource)
 	if err != nil {
 		return mcp.NewToolResultError(fmt.Sprintf("failed to create/update resource: %v", err)), nil
@@ -162,9 +159,9 @@ func (s *Server) resourceCreateOrUpdate(ctx context.Context, ctr mcp.CallToolReq
 func (s *Server) ResourceDescribe(ctx context.Context, ctr mcp.CallToolRequest) (*mcp.CallToolResult, error) {
 	r := common.Request{
 		Context:   ctx,
-		Kind:      ctr.Params.Arguments["kind"].(string),
-		Name:      ctr.Params.Arguments["name"].(string),
-		Namespace: ctr.Params.Arguments["namespace"].(string),
+		Kind:      ctr.GetString("kind", ""),
+		Name:      ctr.GetString("name", ""),
+		Namespace: ctr.GetString("namespace", ""),
 	}
 	res, err := s.k8s.ResourceDescribe(r)
 	if err != nil {
@@ -174,12 +171,9 @@ func (s *Server) ResourceDescribe(ctx context.Context, ctr mcp.CallToolRequest) 
 }
 
 func (s *Server) workloadResourceUsage(ctx context.Context, ctr mcp.CallToolRequest) (*mcp.CallToolResult, error) {
-	namespace := ctr.Params.Arguments["namespace"].(string)
-	kind := ctr.Params.Arguments["kind"].(string)
-	var name string
-	if v, ok := ctr.Params.Arguments["name"].(string); ok {
-		name = v
-	}
+	namespace := ctr.GetString("namespace", "")
+	kind := ctr.GetString("kind", "")
+	name := ctr.GetString("name", "")
 	res, err := s.k8s.WorkloadResourceUsage(common.Request{
 		Context:   ctx,
 		Name:      name,

@@ -23,10 +23,7 @@ func (s *Server) initIngress() []server.ServerTool {
 	}
 }
 func (s *Server) ingressAnalyze(ctx context.Context, ctr mcp.CallToolRequest) (*mcp.CallToolResult, error) {
-	var ns string
-	if v, ok := ctr.Params.Arguments["namespace"].(string); ok {
-		ns = v
-	}
+	ns := ctr.GetString("namespace", "")
 	r := common.Request{
 		Context:   ctx,
 		Namespace: ns,

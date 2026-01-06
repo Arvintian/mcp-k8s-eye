@@ -23,7 +23,7 @@ func (s *Server) initService() []server.ServerTool {
 }
 
 func (s *Server) serviceAnalyze(ctx context.Context, ctr mcp.CallToolRequest) (*mcp.CallToolResult, error) {
-	ns := ctr.Params.Arguments["namespace"].(string)
+	ns := ctr.GetString("namespace", "")
 	res, err := s.k8s.AnalyzeService(ctx, ns)
 	if err != nil {
 		return mcp.NewToolResultError(fmt.Sprintf("failed to analyze services in namespace %s: %v", ns, err)), nil

@@ -23,7 +23,7 @@ func (s *Server) initStatefulSet() []server.ServerTool {
 	}
 }
 func (s *Server) statefulSetAnalyze(ctx context.Context, ctr mcp.CallToolRequest) (*mcp.CallToolResult, error) {
-	ns := ctr.Params.Arguments["namespace"].(string)
+	ns := ctr.GetString("namespace", "")
 	r := common.Request{
 		Context:   ctx,
 		Namespace: ns,

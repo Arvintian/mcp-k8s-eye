@@ -26,10 +26,7 @@ func (s *Server) initCronJob() []server.ServerTool {
 }
 
 func (s *Server) cronjobAnalyze(ctx context.Context, ctr mcp.CallToolRequest) (*mcp.CallToolResult, error) {
-	var ns string
-	if v, ok := ctr.Params.Arguments["namespace"].(string); ok {
-		ns = v
-	}
+	ns := ctr.GetString("namespace", "")
 	res, err := s.k8s.AnalyzeCronJob(common.Request{
 		Context:   ctx,
 		Namespace: ns,
