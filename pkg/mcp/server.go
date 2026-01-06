@@ -3,6 +3,7 @@ package mcp
 import (
 	"log"
 	"slices"
+	"time"
 
 	"github.com/mark3labs/mcp-go/server"
 	"github.com/wenhuwang/mcp-k8s-eye/pkg/k8s"
@@ -22,6 +23,7 @@ func NewServer(name, version string, write bool) (*Server, error) {
 			server.WithResourceCapabilities(true, true),
 			server.WithPromptCapabilities(true),
 			server.WithLogging(),
+			server.WithRecovery(),
 		),
 		write: write,
 	}
@@ -51,10 +53,14 @@ func NewServer(name, version string, write bool) (*Server, error) {
 }
 
 func (s *Server) ServeStdio() error {
-	return server.ServeStdio(s.server)
+	options := []server.StdioOption{}
+	return server.ServeStdio(s.server, options...)
 }
 
 func (s *Server) ServeSSE() *server.SSEServer {
-	options := []server.SSEOption{}
+	options := []server.SSEOption{
+		server.WithKeepAlive(true),
+		server.WithKeepAliveInterval(time.Second * 120),
+	}
 	return server.NewSSEServer(s.server, options...)
 }
