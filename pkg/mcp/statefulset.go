@@ -16,6 +16,7 @@ func (s *Server) initStatefulSet() []server.ServerTool {
 				mcp.WithDescription("analyze statefulset status"),
 				mcp.WithString("namespace",
 					mcp.Description("the namespace to analyze statefulset in"),
+					mcp.Required(),
 				),
 			),
 			Handler: s.statefulSetAnalyze,

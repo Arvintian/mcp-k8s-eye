@@ -14,7 +14,7 @@ func (s *Server) initNode() []server.ServerTool {
 			Tool: mcp.NewTool("node_analyze",
 				mcp.WithDescription("analyze node status"),
 				mcp.WithString("name",
-					mcp.Description("the node name to analyze"),
+					mcp.Description("the node name to analyze, can be a \"\" string to all nodes"),
 				),
 			),
 			Handler: s.nodeAnalyze,

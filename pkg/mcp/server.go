@@ -15,7 +15,7 @@ type Server struct {
 	write  bool
 }
 
-func NewServer(name, version string, write bool) (*Server, error) {
+func NewServer(name, version string, write bool, extend bool) (*Server, error) {
 	s := &Server{
 		server: server.NewMCPServer(
 			name,
@@ -42,9 +42,11 @@ func NewServer(name, version string, write bool) (*Server, error) {
 		s.initNode(),
 		s.initIngress(),
 		s.initCronJob(),
-		s.initNetworkPolicy(),
-		s.initWebhook(),
 	)
+	if extend {
+		tools = append(tools, s.initNetworkPolicy()...)
+		tools = append(tools, s.initWebhook()...)
+	}
 	s.server.AddTools(tools...)
 	for _, item := range tools {
 		log.Printf("add tool %s\n", item.Tool.Name)

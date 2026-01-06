@@ -37,7 +37,7 @@ var rootCmd = &cobra.Command{
 			fmt.Println(common.Version)
 			return
 		}
-		mcpServer, err := mcp.NewServer(common.ProjectName, common.Version, viper.GetBool("write"))
+		mcpServer, err := mcp.NewServer(common.ProjectName, common.Version, viper.GetBool("write"), viper.GetBool("extend"))
 		if err != nil {
 			log.Fatalf("Failed to create MCP server: %v", err)
 		}
@@ -69,6 +69,7 @@ func init() {
 	rootCmd.Flags().BoolP("sse", "s", false, "Start SSE server(default port is 8080)")
 	rootCmd.Flags().IntP("port", "p", 0, "Start SSE server with specified port")
 	rootCmd.Flags().BoolP("write", "w", false, "Enable cluster write permissions tools")
+	rootCmd.Flags().BoolP("extend", "e", false, "Enable cluster extends resources")
 	_ = viper.BindPFlags(rootCmd.Flags())
 }
 

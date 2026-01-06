@@ -16,6 +16,7 @@ func (s *Server) initIngress() []server.ServerTool {
 				mcp.WithDescription("analyze ingress status"),
 				mcp.WithString("namespace",
 					mcp.Description("the ingress namespace to analyze"),
+					mcp.Required(),
 				),
 			),
 			Handler: s.ingressAnalyze,
