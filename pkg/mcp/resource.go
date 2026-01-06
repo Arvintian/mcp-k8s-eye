@@ -12,7 +12,7 @@ import (
 func (s *Server) initResource() []server.ServerTool {
 	tools := []server.ServerTool{
 		{
-			Tool: mcp.NewTool("resource list",
+			Tool: mcp.NewTool("resource_list",
 				mcp.WithDescription("list resources in a namespace or all namespaces"),
 				mcp.WithString("kind",
 					mcp.Description("the kind of resource to list"),
@@ -29,7 +29,7 @@ func (s *Server) initResource() []server.ServerTool {
 			Handler: s.resourceList,
 		},
 		{
-			Tool: mcp.NewTool("resource get",
+			Tool: mcp.NewTool("resource_get",
 				mcp.WithDescription("get resource details"),
 				mcp.WithString("kind",
 					mcp.Description("the kind of resource to get"),
@@ -47,7 +47,7 @@ func (s *Server) initResource() []server.ServerTool {
 			Handler: s.resourceGet,
 		},
 		{
-			Tool: mcp.NewTool("resource describe",
+			Tool: mcp.NewTool("resource_describe",
 				mcp.WithDescription("describe resource"),
 				mcp.WithString("kind",
 					mcp.Description("the resource kind to describe"),
@@ -65,7 +65,7 @@ func (s *Server) initResource() []server.ServerTool {
 			Handler: s.ResourceDescribe,
 		},
 		{
-			Tool: mcp.NewTool("workload resource usage",
+			Tool: mcp.NewTool("workload_resource_usage",
 				mcp.WithDescription("workload resource usage"),
 				mcp.WithString("kind",
 					mcp.Description("the kind of workload"),
@@ -86,7 +86,7 @@ func (s *Server) initResource() []server.ServerTool {
 	if s.write {
 		tools = append(tools,
 			server.ServerTool{
-				Tool: mcp.NewTool("resource delete",
+				Tool: mcp.NewTool("resource_delete",
 					mcp.WithDescription("delete resource"),
 					mcp.WithString("kind",
 						mcp.Description("the kind of resource to delete"),
@@ -104,7 +104,7 @@ func (s *Server) initResource() []server.ServerTool {
 				Handler: s.resourceDelete,
 			},
 			server.ServerTool{
-				Tool: mcp.NewTool("resource create or update",
+				Tool: mcp.NewTool("resource_create_or_update",
 					mcp.WithDescription("create or update resource"),
 					mcp.WithString("resource",
 						mcp.Description("the resource to create or update"),

@@ -13,7 +13,7 @@ import (
 func (s *Server) initNetworkPolicy() []server.ServerTool {
 	return []server.ServerTool{
 		{
-			Tool: mcp.NewTool("networkpolicy analyze",
+			Tool: mcp.NewTool("networkpolicy_analyze",
 				mcp.WithDescription("analyze networkpolicy status"),
 				mcp.WithString("namespace",
 					mcp.Description("the namespace to analyze network policies in"),

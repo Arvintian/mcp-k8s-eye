@@ -11,7 +11,7 @@ import (
 func (s *Server) initDeployment() []server.ServerTool {
 	tools := []server.ServerTool{
 		{
-			Tool: mcp.NewTool("deployment analyze",
+			Tool: mcp.NewTool("deployment_analyze",
 				mcp.WithDescription("analyze deployment status"),
 				mcp.WithString("namespace",
 					mcp.Description("the namespace to analyze deployments in"),
@@ -22,7 +22,7 @@ func (s *Server) initDeployment() []server.ServerTool {
 	}
 	if s.write {
 		tools = append(tools, server.ServerTool{
-			Tool: mcp.NewTool("deployment scale",
+			Tool: mcp.NewTool("deployment_scale",
 				mcp.WithDescription("scale deployment replicas"),
 				mcp.WithString("namespace",
 					mcp.Description("the namespace of the deployment"),

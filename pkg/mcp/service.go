@@ -11,7 +11,7 @@ import (
 func (s *Server) initService() []server.ServerTool {
 	return []server.ServerTool{
 		{
-			Tool: mcp.NewTool("service analyze",
+			Tool: mcp.NewTool("service_analyze",
 				mcp.WithDescription("analyze service status"),
 				mcp.WithString("namespace",
 					mcp.Description("the namespace to analyze services in"),

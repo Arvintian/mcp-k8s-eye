@@ -13,7 +13,7 @@ import (
 func (s *Server) initWebhook() []server.ServerTool {
 	return []server.ServerTool{
 		{
-			Tool: mcp.NewTool("validatingwebhook analyze",
+			Tool: mcp.NewTool("validatingwebhook_analyze",
 				mcp.WithDescription("analyze validating webhook configurations"),
 				mcp.WithString("name",
 					mcp.Description("the name of the validating webhook configuration to analyze"),
@@ -25,7 +25,7 @@ func (s *Server) initWebhook() []server.ServerTool {
 			Handler: s.validatingWebhookAnalyze,
 		},
 		{
-			Tool: mcp.NewTool("mutatingwebhook analyze",
+			Tool: mcp.NewTool("mutatingwebhook_analyze",
 				mcp.WithDescription("analyze mutating webhook configurations"),
 				mcp.WithString("name",
 					mcp.Description("the name of the mutating webhook configuration to analyze"),

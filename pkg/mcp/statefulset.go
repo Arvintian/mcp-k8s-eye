@@ -12,7 +12,7 @@ import (
 func (s *Server) initStatefulSet() []server.ServerTool {
 	return []server.ServerTool{
 		{
-			Tool: mcp.NewTool("statefulset analyze",
+			Tool: mcp.NewTool("statefulset_analyze",
 				mcp.WithDescription("analyze statefulset status"),
 				mcp.WithString("namespace",
 					mcp.Description("the namespace to analyze statefulset in"),

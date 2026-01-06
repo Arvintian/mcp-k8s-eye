@@ -11,7 +11,7 @@ import (
 func (s *Server) initPod() []server.ServerTool {
 	tools := []server.ServerTool{
 		{
-			Tool: mcp.NewTool("pod logs",
+			Tool: mcp.NewTool("pod_logs",
 				mcp.WithDescription("get pod logs"),
 				mcp.WithString("namespace",
 					mcp.Description("the namespace to get pods in"),
@@ -26,7 +26,7 @@ func (s *Server) initPod() []server.ServerTool {
 			Handler: s.podLogs,
 		},
 		{
-			Tool: mcp.NewTool("pod analyze",
+			Tool: mcp.NewTool("pod_analyze",
 				mcp.WithDescription("analyze pod"),
 				mcp.WithString("namespace",
 					mcp.Description("the namespace to get pods in"),
@@ -37,7 +37,7 @@ func (s *Server) initPod() []server.ServerTool {
 	}
 	if s.write {
 		tools = append(tools, server.ServerTool{
-			Tool: mcp.NewTool("pod exec",
+			Tool: mcp.NewTool("pod_exec",
 				mcp.WithDescription("execute a command in a pod"),
 				mcp.WithString("namespace",
 					mcp.Description("the namespace to get pods in"),

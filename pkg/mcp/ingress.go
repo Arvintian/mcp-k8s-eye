@@ -12,7 +12,7 @@ import (
 func (s *Server) initIngress() []server.ServerTool {
 	return []server.ServerTool{
 		{
-			Tool: mcp.NewTool("ingress analyze",
+			Tool: mcp.NewTool("ingress_analyze",
 				mcp.WithDescription("analyze ingress status"),
 				mcp.WithString("namespace",
 					mcp.Description("the ingress namespace to analyze"),

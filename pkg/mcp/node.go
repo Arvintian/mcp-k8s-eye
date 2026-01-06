@@ -11,7 +11,7 @@ import (
 func (s *Server) initNode() []server.ServerTool {
 	return []server.ServerTool{
 		{
-			Tool: mcp.NewTool("node analyze",
+			Tool: mcp.NewTool("node_analyze",
 				mcp.WithDescription("analyze node status"),
 				mcp.WithString("name",
 					mcp.Description("the node name to analyze"),
