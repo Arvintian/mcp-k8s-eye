@@ -30,7 +30,7 @@ func (s *Server) initPod() []server.ServerTool {
 		},
 		{
 			Tool: mcp.NewTool("pod_analyze",
-				mcp.WithDescription("analyze pod"),
+				mcp.WithDescription("filter unhealthy pod and analyze it"),
 				mcp.WithString("namespace",
 					mcp.Description("the namespace to get pods in"),
 					mcp.Required(),

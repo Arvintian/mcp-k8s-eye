@@ -19,7 +19,7 @@ func (s *Server) initResource() []server.ServerTool {
 					mcp.Required(),
 				),
 				mcp.WithString("namespace",
-					mcp.Description("the namespace to list resources in, can be a \"\" string to list resources in all namespace"),
+					mcp.Description("the namespace to list resources in, can be a \"\" string to list resources in all namespace, if kind is namespaced resource this field is required"),
 				),
 				mcp.WithString("labelSelector",
 					mcp.Description("the label selector to filter list resource, can be a \"\" string if no selector"),

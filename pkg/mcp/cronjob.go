@@ -14,7 +14,7 @@ func (s *Server) initCronJob() []server.ServerTool {
 	return []server.ServerTool{
 		{
 			Tool: mcp.NewTool("cronjob_analyze",
-				mcp.WithDescription("analyze cronjob status"),
+				mcp.WithDescription("filter unhealthy cronjob and analyze it"),
 				mcp.WithString("namespace",
 					mcp.Description("the cronjob namespace to analyze"),
 					mcp.Required(),

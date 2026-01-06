@@ -12,7 +12,7 @@ func (s *Server) initService() []server.ServerTool {
 	return []server.ServerTool{
 		{
 			Tool: mcp.NewTool("service_analyze",
-				mcp.WithDescription("analyze service status"),
+				mcp.WithDescription("filter unhealthy services and analyze it"),
 				mcp.WithString("namespace",
 					mcp.Description("the namespace to analyze services in"),
 					mcp.Required(),

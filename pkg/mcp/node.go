@@ -12,7 +12,7 @@ func (s *Server) initNode() []server.ServerTool {
 	return []server.ServerTool{
 		{
 			Tool: mcp.NewTool("node_analyze",
-				mcp.WithDescription("analyze node status"),
+				mcp.WithDescription("filter unhealthy nodes and analyze it"),
 				mcp.WithString("name",
 					mcp.Description("the node name to analyze, can be a \"\" string to all nodes"),
 				),

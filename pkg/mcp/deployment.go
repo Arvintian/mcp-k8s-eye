@@ -12,7 +12,7 @@ func (s *Server) initDeployment() []server.ServerTool {
 	tools := []server.ServerTool{
 		{
 			Tool: mcp.NewTool("deployment_analyze",
-				mcp.WithDescription("analyze deployment status"),
+				mcp.WithDescription("filter unhealthy deployments and analyze it"),
 				mcp.WithString("namespace",
 					mcp.Description("the namespace to analyze deployments in"),
 					mcp.Required(),

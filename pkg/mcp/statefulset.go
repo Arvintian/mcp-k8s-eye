@@ -13,7 +13,7 @@ func (s *Server) initStatefulSet() []server.ServerTool {
 	return []server.ServerTool{
 		{
 			Tool: mcp.NewTool("statefulset_analyze",
-				mcp.WithDescription("analyze statefulset status"),
+				mcp.WithDescription("filter unhealthy statefulset and analyze it"),
 				mcp.WithString("namespace",
 					mcp.Description("the namespace to analyze statefulset in"),
 					mcp.Required(),

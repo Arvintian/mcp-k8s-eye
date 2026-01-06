@@ -14,7 +14,7 @@ func (s *Server) initWebhook() []server.ServerTool {
 	return []server.ServerTool{
 		{
 			Tool: mcp.NewTool("validatingwebhook_analyze",
-				mcp.WithDescription("analyze validating webhook configurations"),
+				mcp.WithDescription("filter unhealthy validating webhook configurations and analyze it"),
 				mcp.WithString("name",
 					mcp.Description("the name of the validating webhook configuration to analyze"),
 				),
@@ -26,7 +26,7 @@ func (s *Server) initWebhook() []server.ServerTool {
 		},
 		{
 			Tool: mcp.NewTool("mutatingwebhook_analyze",
-				mcp.WithDescription("analyze mutating webhook configurations"),
+				mcp.WithDescription("filter unhealthy mutating webhook configuration and analyze it"),
 				mcp.WithString("name",
 					mcp.Description("the name of the mutating webhook configuration to analyze"),
 				),
