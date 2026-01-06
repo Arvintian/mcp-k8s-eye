@@ -6,6 +6,7 @@ import (
 	v1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/apis/meta/v1/unstructured"
+	"k8s.io/apimachinery/pkg/labels"
 	"k8s.io/client-go/kubernetes"
 	"sigs.k8s.io/yaml"
 )
@@ -108,4 +109,11 @@ func NamespaceOrDefault(namespace string) string {
 		return "default"
 	}
 	return namespace
+}
+
+func MatchLabelsToLabelSelector(matchLabels map[string]string) string {
+	selector := &metav1.LabelSelector{
+		MatchLabels: matchLabels,
+	}
+	return labels.Set(selector.MatchLabels).String()
 }
