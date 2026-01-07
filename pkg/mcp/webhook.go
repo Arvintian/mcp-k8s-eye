@@ -11,32 +11,36 @@ import (
 
 // Register webhook analysis tools
 func (s *Server) initWebhook() []server.ServerTool {
-	return []server.ServerTool{
-		{
-			Tool: mcp.NewTool("validatingwebhook_analyze",
-				mcp.WithDescription("filter unhealthy validating webhook configurations and analyze it"),
-				mcp.WithString("name",
-					mcp.Description("the name of the validating webhook configuration to analyze"),
+	tools := []server.ServerTool{}
+	if s.analyze {
+		tools = append(tools, []server.ServerTool{
+			{
+				Tool: mcp.NewTool("validatingwebhook_analyze",
+					mcp.WithDescription("filter unhealthy validating webhook configurations and analyze it"),
+					mcp.WithString("name",
+						mcp.Description("the name of the validating webhook configuration to analyze"),
+					),
+					mcp.WithString("label-selector",
+						mcp.Description("label selector to filter resources (optional)"),
+					),
 				),
-				mcp.WithString("label-selector",
-					mcp.Description("label selector to filter resources (optional)"),
+				Handler: s.validatingWebhookAnalyze,
+			},
+			{
+				Tool: mcp.NewTool("mutatingwebhook_analyze",
+					mcp.WithDescription("filter unhealthy mutating webhook configuration and analyze it"),
+					mcp.WithString("name",
+						mcp.Description("the name of the mutating webhook configuration to analyze"),
+					),
+					mcp.WithString("label-selector",
+						mcp.Description("label selector to filter resources (optional)"),
+					),
 				),
-			),
-			Handler: s.validatingWebhookAnalyze,
-		},
-		{
-			Tool: mcp.NewTool("mutatingwebhook_analyze",
-				mcp.WithDescription("filter unhealthy mutating webhook configuration and analyze it"),
-				mcp.WithString("name",
-					mcp.Description("the name of the mutating webhook configuration to analyze"),
-				),
-				mcp.WithString("label-selector",
-					mcp.Description("label selector to filter resources (optional)"),
-				),
-			),
-			Handler: s.mutatingWebhookAnalyze,
-		},
+				Handler: s.mutatingWebhookAnalyze,
+			}}...,
+		)
 	}
+	return tools
 }
 
 // Handler for validating webhook analysis

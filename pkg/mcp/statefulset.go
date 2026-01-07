@@ -10,8 +10,9 @@ import (
 )
 
 func (s *Server) initStatefulSet() []server.ServerTool {
-	return []server.ServerTool{
-		{
+	tools := []server.ServerTool{}
+	if s.analyze {
+		tools = append(tools, []server.ServerTool{{
 			Tool: mcp.NewTool("statefulset_analyze",
 				mcp.WithDescription("filter unhealthy statefulset and analyze it"),
 				mcp.WithString("namespace",
@@ -19,8 +20,10 @@ func (s *Server) initStatefulSet() []server.ServerTool {
 				),
 			),
 			Handler: s.statefulSetAnalyze,
-		},
+		}}...,
+		)
 	}
+	return tools
 }
 func (s *Server) statefulSetAnalyze(ctx context.Context, ctr mcp.CallToolRequest) (*mcp.CallToolResult, error) {
 	ns := ctr.GetString("namespace", "")

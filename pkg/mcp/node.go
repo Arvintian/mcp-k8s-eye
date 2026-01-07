@@ -9,8 +9,9 @@ import (
 )
 
 func (s *Server) initNode() []server.ServerTool {
-	return []server.ServerTool{
-		{
+	tools := []server.ServerTool{}
+	if s.analyze {
+		tools = append(tools, []server.ServerTool{{
 			Tool: mcp.NewTool("node_analyze",
 				mcp.WithDescription("filter unhealthy nodes and analyze it"),
 				mcp.WithString("name",
@@ -18,8 +19,10 @@ func (s *Server) initNode() []server.ServerTool {
 				),
 			),
 			Handler: s.nodeAnalyze,
-		},
+		}}...,
+		)
 	}
+	return tools
 }
 func (s *Server) nodeAnalyze(ctx context.Context, ctr mcp.CallToolRequest) (*mcp.CallToolResult, error) {
 	name := ctr.GetString("name", "")

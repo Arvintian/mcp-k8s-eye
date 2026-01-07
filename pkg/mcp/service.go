@@ -9,8 +9,9 @@ import (
 )
 
 func (s *Server) initService() []server.ServerTool {
-	return []server.ServerTool{
-		{
+	tools := []server.ServerTool{}
+	if s.analyze {
+		tools = append(tools, []server.ServerTool{{
 			Tool: mcp.NewTool("service_analyze",
 				mcp.WithDescription("filter unhealthy services and analyze it"),
 				mcp.WithString("namespace",
@@ -18,8 +19,10 @@ func (s *Server) initService() []server.ServerTool {
 				),
 			),
 			Handler: s.serviceAnalyze,
-		},
+		}}...,
+		)
 	}
+	return tools
 }
 
 func (s *Server) serviceAnalyze(ctx context.Context, ctr mcp.CallToolRequest) (*mcp.CallToolResult, error) {

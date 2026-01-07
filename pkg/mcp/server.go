@@ -10,12 +10,13 @@ import (
 )
 
 type Server struct {
-	server *server.MCPServer
-	k8s    *k8s.Kubernetes
-	write  bool
+	server  *server.MCPServer
+	k8s     *k8s.Kubernetes
+	write   bool
+	analyze bool
 }
 
-func NewServer(name, version string, write bool, extend bool) (*Server, error) {
+func NewServer(name, version string, write, extend, analyze bool) (*Server, error) {
 	s := &Server{
 		server: server.NewMCPServer(
 			name,
@@ -25,7 +26,8 @@ func NewServer(name, version string, write bool, extend bool) (*Server, error) {
 			server.WithLogging(),
 			server.WithRecovery(),
 		),
-		write: write,
+		write:   write,
+		analyze: analyze,
 	}
 	k8s, err := k8s.NewKubernetes()
 	if err != nil {

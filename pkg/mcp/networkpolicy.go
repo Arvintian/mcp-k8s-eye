@@ -11,8 +11,9 @@ import (
 
 // Register networkpolicy analyze tool
 func (s *Server) initNetworkPolicy() []server.ServerTool {
-	return []server.ServerTool{
-		{
+	tools := []server.ServerTool{}
+	if s.analyze {
+		tools = append(tools, []server.ServerTool{{
 			Tool: mcp.NewTool("networkpolicy_analyze",
 				mcp.WithDescription("filter unhealthy network policies and analyze it"),
 				mcp.WithString("namespace",
@@ -20,8 +21,10 @@ func (s *Server) initNetworkPolicy() []server.ServerTool {
 				),
 			),
 			Handler: s.networkPolicyAnalyze,
-		},
+		}}...,
+		)
 	}
+	return tools
 }
 
 func (s *Server) networkPolicyAnalyze(ctx context.Context, ctr mcp.CallToolRequest) (*mcp.CallToolResult, error) {

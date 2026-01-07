@@ -9,8 +9,9 @@ import (
 )
 
 func (s *Server) initDeployment() []server.ServerTool {
-	tools := []server.ServerTool{
-		{
+	tools := []server.ServerTool{}
+	if s.analyze {
+		tools = append(tools, []server.ServerTool{{
 			Tool: mcp.NewTool("deployment_analyze",
 				mcp.WithDescription("filter unhealthy deployments and analyze it"),
 				mcp.WithString("namespace",
@@ -18,7 +19,8 @@ func (s *Server) initDeployment() []server.ServerTool {
 				),
 			),
 			Handler: s.deploymentAnalyze,
-		},
+		}}...,
+		)
 	}
 	if s.write {
 		tools = append(tools, server.ServerTool{

@@ -11,8 +11,9 @@ import (
 
 // Register cronjob analyze tool
 func (s *Server) initCronJob() []server.ServerTool {
-	return []server.ServerTool{
-		{
+	tools := []server.ServerTool{}
+	if s.analyze {
+		tools = append(tools, []server.ServerTool{{
 			Tool: mcp.NewTool("cronjob_analyze",
 				mcp.WithDescription("filter unhealthy cronjob and analyze it"),
 				mcp.WithString("namespace",
@@ -20,8 +21,10 @@ func (s *Server) initCronJob() []server.ServerTool {
 				),
 			),
 			Handler: s.cronjobAnalyze,
-		},
+		}}...,
+		)
 	}
+	return tools
 }
 
 func (s *Server) cronjobAnalyze(ctx context.Context, ctr mcp.CallToolRequest) (*mcp.CallToolResult, error) {

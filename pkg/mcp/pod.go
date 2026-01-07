@@ -28,15 +28,19 @@ func (s *Server) initPod() []server.ServerTool {
 			),
 			Handler: s.podLogs,
 		},
-		{
-			Tool: mcp.NewTool("pod_analyze",
-				mcp.WithDescription("filter unhealthy pod and analyze it"),
-				mcp.WithString("namespace",
-					mcp.Description("the namespace to get pods in, can be a \"\" string to all namespace"),
+	}
+	if s.analyze {
+		tools = append(tools, []server.ServerTool{
+			{
+				Tool: mcp.NewTool("pod_analyze",
+					mcp.WithDescription("filter unhealthy pod and analyze it"),
+					mcp.WithString("namespace",
+						mcp.Description("the namespace to get pods in, can be a \"\" string to all namespace"),
+					),
 				),
-			),
-			Handler: s.podAnalyze,
-		},
+				Handler: s.podAnalyze,
+			}}...,
+		)
 	}
 	if s.write {
 		tools = append(tools, server.ServerTool{
