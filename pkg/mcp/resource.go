@@ -13,7 +13,7 @@ func (s *Server) initResource() []server.ServerTool {
 	tools := []server.ServerTool{
 		{
 			Tool: mcp.NewTool("resource_list",
-				mcp.WithDescription("list resources in a namespace or all namespaces"),
+				mcp.WithDescription("List Kubernetes resources in the current cluster"),
 				mcp.WithString("kind",
 					mcp.Description("the kind of resource to list"),
 					mcp.Required(),
@@ -29,7 +29,7 @@ func (s *Server) initResource() []server.ServerTool {
 		},
 		{
 			Tool: mcp.NewTool("resource_get",
-				mcp.WithDescription("get resource details"),
+				mcp.WithDescription("Get a Kubernetes resource in the current cluster"),
 				mcp.WithString("kind",
 					mcp.Description("the kind of resource to get"),
 					mcp.Required(),
@@ -46,7 +46,7 @@ func (s *Server) initResource() []server.ServerTool {
 		},
 		{
 			Tool: mcp.NewTool("resource_describe",
-				mcp.WithDescription("describe resource"),
+				mcp.WithDescription("Describe a kubernetes resource in the current cluster"),
 				mcp.WithString("kind",
 					mcp.Description("the resource kind to describe"),
 					mcp.Enum("Deployment", "StatefulSet", "DaemonSet", "ReplicaSet", "Pod"),
@@ -65,7 +65,7 @@ func (s *Server) initResource() []server.ServerTool {
 		},
 		{
 			Tool: mcp.NewTool("workload_resource_usage",
-				mcp.WithDescription("workload resource usage"),
+				mcp.WithDescription("Get a Kubernetes workload resource usage in the current cluster"),
 				mcp.WithString("kind",
 					mcp.Description("the kind of workload"),
 					mcp.Required(),

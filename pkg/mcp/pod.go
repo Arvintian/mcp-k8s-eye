@@ -12,7 +12,7 @@ func (s *Server) initPod() []server.ServerTool {
 	tools := []server.ServerTool{
 		{
 			Tool: mcp.NewTool("pod_logs",
-				mcp.WithDescription("get pod logs"),
+				mcp.WithDescription("Get the logs of a Kubernetes Pod in the current cluster"),
 				mcp.WithString("namespace",
 					mcp.Description("the namespace to get pods in"),
 					mcp.Required(),
