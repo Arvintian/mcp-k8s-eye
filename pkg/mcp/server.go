@@ -1,7 +1,8 @@
 package mcp
 
 import (
-	"log"
+	"fmt"
+	"os"
 	"slices"
 	"time"
 
@@ -51,7 +52,7 @@ func NewServer(name, version string, write, extend, analyze bool) (*Server, erro
 	}
 	s.server.AddTools(tools...)
 	for _, item := range tools {
-		log.Printf("add tool %s\n", item.Tool.Name)
+		os.Stderr.WriteString(fmt.Sprintf("add tool %s\n", item.Tool.Name))
 	}
 	return s, nil
 }
